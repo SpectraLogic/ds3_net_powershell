@@ -47,6 +47,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ds3_net_sdk">
+      <HintPath>..\packages\ds3_net_sdk.1.1.0.0\lib\net40\ds3_net_sdk.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Management.Automation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -107,12 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="BuildModule.ps1" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DS3\Ds3.csproj">
-      <Project>{00047ea6-0178-4abd-b183-d1d73d222673}</Project>
-      <Name>Ds3</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
