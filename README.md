@@ -1,134 +1,51 @@
-# DS3 .Net SDK
+This page documents how to install and use the PowerShell DS3 module.
 
-An [SDK](http://en.wikipedia.org/wiki/Software_development_kit) and Windows
-PowerShell [CLI](http://en.wikipedia.org/wiki/Command-line_interface)
-conforming to the DS3 specification.
+# Upgrade PowerShell
 
-See the [PowerShell DS3 Module Documentation](../../wiki/PowerShell-DS3-Module)
-for more information on using DS3 from the command line on Windows.
+To run the PowerShell DS3 SDK you'll need to have PowerShell version 3.0 or above.
 
-## Contact Us
+First check what version of PowerShell is currently installed.
 
-Join us at our [Google Groups](https://groups.google.com/d/forum/spectralogicds3-sdks) forum to ask questions, or see frequently asked questions.
+1. Press the Windows key on the keyboard between ctrl and alt.
+2. Type "PowerShell" in the search box.
+3. Click "Windows PowerShell" with the blue icon. A blue window should appear.
+4. Type the following into the prompt and press enter:
+       $PSVersionTable.PSVersion.Major
+5. If a number of 3 or greater appears when you press enter, then you can skip the rest of this section.
+	
+Before we download the installer we need to check whether you're running 64-bit Windows.
 
-## Setting up NuGet
+1. Press the Windows key on the keyboard between ctrl and alt.
+2. Type "version" in the search box.
+3. Click "Show which operating system your computer is running."
+4. Under "System type" check to see whether it says 64-bit.
+	
+Download and install the latest version of PowerShell.
 
-The SDK is distributed as a [NuGet](http://www.nuget.org) package for .Net 4.0
-and above. From the NuGet website:
+1. Open the following link in your web browser:
+       http://www.microsoft.com/en-us/download/details.aspx?id=40855
+2. Click the big "Download" button.
+3. If you're running a 64-bit version of Windows, click the checkbox next to "Windows6.1-KB2819745-**x64**-MultiPkg.msu". Otherwise, click the checkbox next to "Windows6.1-KB2819745-**x86**-MultiPkg.msu". (Windows6.1 refers to Microsoft's internal version number. This actually means Windows 7.)
+4. Click the "Next" button in the lower right corner of the web page. Your browser should start downloading the installer.
+5. Different browsers have different default download locations. Locate the installer in Windows explorer and double-click it.
+6. Click next, ok, finish, etc. until the installer completes.
+	
+# Install the DS3 PowerShell Module
 
-> *What is NuGet?*
+Now install the DS3 module into PowerShell.
 
-> NuGet is the package manager for the Microsoft development platform including
-> .NET. The NuGet client tools provide the ability to produce and consume
-> packages. The NuGet Gallery is the central package repository used by all
-> package authors and consumers.
+1. Download the latest Ds3ClientInstaller.exe from the [Releases](../releases) page.
+2. Double-click the installer to run it. The installer has no options or dialogs; it runs silently and completes silently.
 
-While the DS3 SDK is not yet in the [NuGet
-Gallery](http://www.nuget.org/packages), you can easily create a package feed
-on your computer using the latest release:
+# Use the DS3 PowerShell Module
 
-1. Download the .nupkg file from the [Releases](../../releases) page to a new
-   directory of your choice.
-2. Follow the NuGet instructions on [Creating Local Feeds](http://docs.nuget.org/docs/creating-packages/hosting-your-own-nuget-feeds#Creating_Local_Feeds)
-   using the directory that you've created.
+Start a PowerShell session and start using the DS3 commands.
 
-This makes the DS3 SDK available for installation into a Visual Studio .NET
-Project.
-
-## Using the Examples Project
-
-The [Releases](../../releases) page has an examples project that references the
-DS3 SDK package.
-
-1. Unzip `DS3Examples.zip` and open the `DS3Examples.sln` file in Visual
-   Studio.
-2. Edit the `App.config` file to use the endpoint, access key, and secret key
-   for your DS3 applicance.
-3. Right-click the DS3Examples project in the Solution Explorer and click
-   "Properties".
-4. Choose which of the four examples you'd like to run from the "Startup
-   Object" dropdown box.
-5. Press the F5 key to run the program within Visual Studio.
-
-Each of the example programs in the project contains a description at the top
-explaining what the program does.
-
-## Installing the DS3 SDK Into Your Own Project
-
-You can also install the SDK into your own project.
-
-1. Open your existing .NET project or create a new one.
-2. Right-click the project and click "Manage NuGet Packages..."
-3. Click "Online" on the left panel.
-4. In the search box on the upper right, type "DS3".
-5. Click the "Install" button next to the "DS3 .NET SDK" package and close the
-   package manager dialog.
-
-Your project should now reference the SDK and be able to use its API.
-
-## About the API
-
-The SDK consists of two levels of abstraction:
-
-1. A high level interface
-   ([`Ds3.Helpers.IDs3ClientHelpers`](http://spectralogic.github.io/ds3_net_sdk/api/interface_ds3_1_1_helpers_1_1_i_ds3_client_helpers.html))
-   that abstracts several very common application requirements.
-2. The core client interface
-   ([`Ds3.IDs3Client`](http://spectralogic.github.io/ds3_net_sdk/api/interface_ds3_1_1_i_ds3_client.html))
-   whose method calls each result in exactly one HTTP request.
-
-
-Some aspects of the low-level Amazon S3 and Spectra Logic DS3 requests require
-a fair amount of non-obvious boilerplate logic that's the same in every
-application. Thus we _strongly_ recommend that all SDK users use the higher
-level interface wherever possible.
-
-As an example, the standard Amazon S3 request to list objects in a bucket only
-returns 1,000 results at a time and must be called repeatedly with paging
-parameters to get a complete list. Since the code to do this will likely be the
-same regardless of the application, we've created the
-[`ListObjects`](http://spectralogic.github.io/ds3_net_sdk/api/interface_ds3_1_1_helpers_1_1_i_ds3_client_helpers.html#aa5255c4e1bc7b4fe515dea0e6d519147)
-method to handle this paging for you.
-
-## Instantiating the API
-
-The example below shows how to configure and instantiate `Ds3.IDs3Client` and
-`Ds3.Helpers.IDs3ClientHelpers`.
-
-```csharp
-using Ds3;
-using Ds3.Helpers;
-using System.Configuration;
-
-namespace YourApplication
-{
-    class YourClass
-    {
-        public void YourMethod()
-        {
-            // Configure and build the core client.
-            IDs3Client client = new Ds3Builder(
-                "http://ds3-endpoint",
-                new Credentials("access key", "secrete key")
-            ).Build();
-
-            // Set up the high-level abstractions.
-            IDs3ClientHelpers helpers = new Ds3ClientHelpers(client);
-
-            // Use functionality from 'helpers' and 'client', preferring 'helpers'.
-            // ...
-        }
-    }
-}
-```
-
-## SDK Development Resources
-
-[Running Unit Tests](../../wiki/Running-Unit-Tests)
-
-[Building from Source](../../wiki/Building-from-Source)
-
-[Building the DS3 SDK NuGet Package](../../wiki/Building-the-DS3-SDK-NuGet-package)
-
-API documentation resides in the gh-pages branch. See the README.md there for information on how to regenerate the API documentation.
-
+1. Press the Windows key on the keyboard between ctrl and alt.
+2. Type "PowerShell" in the search box.
+3. Click "Windows PowerShell" with the blue icon. A blue window should appear.
+4. Import DS3 into the current session. Type the following and press enter:
+       Import-Module Ds3Client
+5. Get additional help. Type the following and press enter:
+       help Ds3Client
+	
