@@ -63,7 +63,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\Ds3Client\bin\Release\Modules\Ds3Client.zip">
+    <EmbeddedResource Include="..\Ds3Client\bin\$(Configuration)\Modules\Ds3Client.zip">
       <Link>Ds3Client.zip</Link>
     </EmbeddedResource>
     <None Include="App.config" />
